@@ -17,7 +17,7 @@
                             {{ $post->title }}
                         </div>
                         <div class="card-body">
-                            <h5 class="card-title">Written on {{ $post->created_at }}</h5>
+                            <h5 class="card-title">Written on {{ $post->created_at }} by {{ $post->user->name }}</h5>
                             <p class="card-text">{!! $post->body !!}</p>
                             <a href="/post/{{ $post->id }}" class="btn btn-primary">Go somewhere</a>
                         </div>

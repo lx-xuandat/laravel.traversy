@@ -15,8 +15,10 @@ use Illuminate\Support\Facades\Route;
 
 Auth::routes();
 
-Route::get('/', 'SiteController@index');
-Route::get('/dashboard', 'SiteController@index');
+
+Route::get('/', 'DashboardController@index');
+Route::get('/dashboard', 'DashboardController@index');
+
 Route::get('/about', 'SiteController@about');
 Route::get('/contact', 'SiteController@about');
 Route::get('/services', 'SiteController@services');

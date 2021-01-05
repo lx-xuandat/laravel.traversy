@@ -18,4 +18,12 @@ class Post extends Model
 
     //Timestamps
     public $timestamps = true;
+
+    /** 
+     * one to one or many relationship.
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
