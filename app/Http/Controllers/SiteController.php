@@ -9,18 +9,18 @@ class SiteController extends Controller
 
     public function index()
     {
-        return view('pages.home');
+        return view('dashboard');
     }
 
 
     public function about()
     {
-        return view('pages.about');
+        return view('about');
     }
 
     public function contact()
     {
-        return view('pages.contact');
+        return view('contact');
     }
 
     public function services()
@@ -34,6 +34,6 @@ class SiteController extends Controller
                 'Maketing Online',
             ],
         ];
-        return view('pages.service')->with($data);
+        return view('service')->with($data);
     }
 }

@@ -1,0 +1,57 @@
+<pre>
+    3. Laravel From Scratch [Part 3] - Basic Routing & Controllers
+    3.1 bind view voi route
+    - tao view
+    - dang ki router va chi dinh view cho router
+    3.2 controller
+    - chay command: php artisan make:controller PagesController
+    - tao function index trong controller PagesController
+    - ket hop route + controller + view
+    (chu i: trong lv 8, can phai su dung tien to khong gian ten dang chuoi day du cho route::get,... hoac chi dinh han nhu vi du : Route::get('/users', [UserController::class, 'index']);
+    - tham khao:
+        https://stackoverflow.com/questions/63807930/target-class-controller-does-not-exist-laravel-8
+    3.3 goi cac string config
+    - trong cac view html, su dung chuoi ki tu {{config config_file.name_config}}
+    - fix loi khi thay doi cau du lieu cau hinh ma van khong thay load duoc noi dung moi:
+        + command 1: php artisan config:clear
+        + command 2: php artisan cache:clear
+        + tham khao tai: https://laracasts.com/discuss/channels/laravel/app-name-can-only-be-changed-in-the-env
+)
+</pre>
+
+<pre>
+    [Part 4] - Blade Templating & Compiling Assets
+    4.1 Blade - cong cu giao dien cho trang web
+    - display data
+    - directive
+    - component
+    - building layout
+    - form
+
+    4.2 Tong hop nhung cach truyen data tu control toi view
+    4.2.1 su dung ham compact voi data la bien string
+    - su dung tham so truyen du lieu (su dung ham compare - nguoc voi ham extrac):  return view('pages.index', compact('title'));
+
+    4.2.2 sudung ham with() voi data cung la bien string
+    -  return view('pages.index')->with('title', $title);
+
+    4.2.3 truyen data la 1 array
+    $data = [
+            'title' => 'Services'
+        ];
+        return view('pages.service')->with( $data);
+</pre>
+
+<pre>
+    PART 5 - Model , Database Migrations
+    5.1 Tao PostController - (app\Http\Controllers)
+    - Lenh artisan:
+        Hoac: php artisan make:controller <[dir]/PostController>
+        Hoac: php artisan make:controller <[dir]/PageController> --resource
+        Bien Co Hieu (flag) --resource (option) : xay dung san cac action cho controlller
+    5.2 Tao Model
+    - Lenh artisan:
+        Hoac: php artisan make:model <[dir]/PostModel>
+        Hoac: php artisan make:model <[dir]/PostModel> -m ()
+        Tham so -m (option): buil file migration Post cung ten voi model
+</pre>
