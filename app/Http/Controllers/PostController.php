@@ -8,6 +8,11 @@ use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth', ['except'=> ['index', 'show']]);
+    }
     /**
      * Show the form for creating a new resource.
      *
@@ -86,6 +91,12 @@ class PostController extends Controller
     public function edit($id)
     {
         $post = Post::find($id);
+
+        // Check for correct user
+        if(auth()->user()->id !== $post->user_id){
+            return redirect('/post')->with('error', 'Unauthorized Page');
+        }
+
         return view('post.edit')->with('post', $post);
     }
 
@@ -124,6 +135,12 @@ class PostController extends Controller
     public function destroy($id)
     {
         Post::find($id)->delete();
+
+        // Check for correct user
+        if(auth()->user()->id !== $post->user_id){
+            return redirect('/post')->with('error', 'Unauthorized Page');
+        }
+
         return redirect('/post')->with('success', 'Post Removed');
     }
 }

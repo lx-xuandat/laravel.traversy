@@ -2,7 +2,7 @@
     <div class="alert alert-danger mt-3">
         <ul>
             @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
+                <li class="alert alert-warning" role="alert">{{ $error }}</li>
             @endforeach
         </ul>
     </div>
@@ -15,7 +15,9 @@
 @endif
 
 @if(session('error'))
-    <div class="alert alert-error">
-        {{session('error')}}
+    <div class="alert alert-danger">
+        <li>
+            {{session('error')}}
+        </li>
     </div>
 @endif
