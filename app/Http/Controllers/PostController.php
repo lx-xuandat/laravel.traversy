@@ -11,8 +11,9 @@ class PostController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth', ['except'=> ['index', 'show']]);
+        $this->middleware('auth', ['except' => ['index', 'show']]);
     }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -58,12 +59,33 @@ class PostController extends Controller
             [
                 'title' => 'required',
                 'body' => 'required',
+                'cover_image' => 'image|nullable|max:1999',
             ]
         );
 
+        // Handle File Upload
+        if ($request->hasFile('cover_image')) {
+            // Get fiename with the extension
+            $fileNameWithExt = $request->file('cover_image')->getClientOriginalName();
+
+            // Get just filename
+            $filename = pathinfo($fileNameWithExt, PATHINFO_FILENAME);
+
+            // Get just extension
+            $extension = $request->file('cover_image')->getClientOriginalExtension();
+
+            // Filename to store
+            $fileNameToStore = $filename . '_' . time() . '.' . $extension;
+
+            // Upload image
+            $path = $request->file('cover_image')->storeAs('public/cover_images', $fileNameToStore);
+        } else {
+            $fileNameToStore = 'noimage.jpg';
+        }
         $post = new Post;
         $post->title = $request->input('title');
         $post->body = $request->input('body');
+        $post->cover_image = $fileNameToStore;
         $post->user_id = Auth::id();
         $post->save();
 
@@ -93,7 +115,7 @@ class PostController extends Controller
         $post = Post::find($id);
 
         // Check for correct user
-        if(auth()->user()->id !== $post->user_id){
+        if (auth()->user()->id !== $post->user_id) {
             return redirect('/post')->with('error', 'Unauthorized Page');
         }
 
@@ -137,7 +159,7 @@ class PostController extends Controller
         Post::find($id)->delete();
 
         // Check for correct user
-        if(auth()->user()->id !== $post->user_id){
+        if (auth()->user()->id !== $post->user_id) {
             return redirect('/post')->with('error', 'Unauthorized Page');
         }
 

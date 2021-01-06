@@ -7,6 +7,7 @@
 @section('main-content')
     <a href="/post" class="btn btn-primary">Go Back</a>
     <h1>{{ $post['title'] }}</h1>
+    <img src="/storage/cover_images/{{$post->cover_image}}" class="rounded mx-auto d-block img-fluid" alt="{{$post->cover_image}}">
     <div>
         {!! $post->body !!}
     </div>
