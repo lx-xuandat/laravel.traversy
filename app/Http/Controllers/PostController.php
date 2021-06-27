@@ -4,9 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth', ['except' => ['index', 'show']]);
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -14,7 +21,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::orderBy('title')->paginate(1);
+        $posts = Post::orderBy('title')->paginate(5);
 
         //        $posts = Post::orderByDesc('created_at')->get();
         //        return Post::where('title','title')->get();
@@ -52,12 +59,34 @@ class PostController extends Controller
             [
                 'title' => 'required',
                 'body' => 'required',
+                'cover_image' => 'image|nullable|max:1999',
             ]
         );
 
+        // Handle File Upload
+        if ($request->hasFile('cover_image')) {
+            // Get fiename with the extension
+            $fileNameWithExt = $request->file('cover_image')->getClientOriginalName();
+
+            // Get just filename
+            $filename = pathinfo($fileNameWithExt, PATHINFO_FILENAME);
+
+            // Get just extension
+            $extension = $request->file('cover_image')->getClientOriginalExtension();
+
+            // Filename to store
+            $fileNameToStore = $filename . '_' . time() . '.' . $extension;
+
+            // Upload image
+            $path = $request->file('cover_image')->storeAs('public/cover_images', $fileNameToStore);
+        } else {
+            $fileNameToStore = 'noimage.jpg';
+        }
         $post = new Post;
         $post->title = $request->input('title');
         $post->body = $request->input('body');
+        $post->cover_image = $fileNameToStore;
+        $post->user_id = Auth::id();
         $post->save();
 
         return redirect('/post')->with('success', 'Post Created');
@@ -84,6 +113,12 @@ class PostController extends Controller
     public function edit($id)
     {
         $post = Post::find($id);
+
+        // Check for correct user
+        if (auth()->user()->id !== $post->user_id) {
+            return redirect('/post')->with('error', 'Unauthorized Page');
+        }
+
         return view('post.edit')->with('post', $post);
     }
 
@@ -107,6 +142,7 @@ class PostController extends Controller
         $post = Post::find($id);
         $post->title = $request->input('title');
         $post->body = $request->input('body');
+        $post->user_id = Auth::id();
         $post->save();
 
         return redirect('/post')->with('success', 'Post Updated');
@@ -121,6 +157,12 @@ class PostController extends Controller
     public function destroy($id)
     {
         Post::find($id)->delete();
+
+        // Check for correct user
+        if (auth()->user()->id !== $post->user_id) {
+            return redirect('/post')->with('error', 'Unauthorized Page');
+        }
+
         return redirect('/post')->with('success', 'Post Removed');
     }
 }
